@@ -1,3 +1,5 @@
+require("dotenv").config(); // Load environment variables
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -7,17 +9,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB
+// Connect to MongoDB (Using environment variable)
 mongoose
-  .connect(
-    "mongodb+srv://arunpandyanv:jobSearch2024!@cluster0.9my39.mongodb.net/todoList",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
+  .connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => console.log("❌ MongoDB connection error:", err));
 
 // Get all tasks
 app.get("/get", async (req, res) => {
@@ -79,10 +78,11 @@ app.put("/update/:id", async (req, res) => {
 });
 
 // Start the server
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server is running on port ${PORT}`);
 });
+
 
 /*const express = require('express')
 const mongoose = require('mongoose')
